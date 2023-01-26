@@ -16,24 +16,28 @@ async function getData() {
     const response = await fetch(url, {
         method: "GET",
     });
+    if (+response.status === 200) {   
+        const json = await response.json();
 
-    const json = await response.json();
+        let result = document.createElement("ul");
+        for (item of json.items) {
+            let li = document.createElement("li");
+            li.innerText = item.title;
+            result.append(li)
+        }
+        
+        let downloadLink = document.createElement("a");
+        let blob = new Blob([JSON.stringify(json.items)], {type: 'application/json'});
 
-    let result = document.createElement("ul");
-    for (item of json.items) {
-        let li = document.createElement("li");
-        li.innerText = item.title;
-        result.append(li)
+        downloadLink.innerText = "Download as JSON";
+        downloadLink.download = "search-results.json";
+        downloadLink.href = URL.createObjectURL(blob);
+        
+        result.append(downloadLink);
+    } else {
+        let result = document.createElement("p");
+        result.innerText = `Search "${searchText}" failed with status ${response.status}: ${response.statusText}`;
     }
-    
-    let downloadLink = document.createElement("a");
-    let blob = new Blob([JSON.stringify(json.items)], {type: 'application/json'});
-
-    downloadLink.innerText = "Download as JSON";
-    downloadLink.download = "search-results.json";
-    downloadLink.href = URL.createObjectURL(blob);
-    
-    result.append(downloadLink);
 
     document.body.append(result);
     document.body.style.backgroundColor = "";
