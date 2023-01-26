@@ -16,14 +16,19 @@ async function getData() {
     const response = await fetch(url, {
         method: "GET",
     });
+
+    let result = document.createElement("div");
+    result.className = "result";
+
     if (+response.status === 200) {   
         const json = await response.json();
 
-        let result = document.createElement("ul");
+        let ul = document.createElement("ul");
+        result.append(ul);
         for (item of json.items) {
             let li = document.createElement("li");
             li.innerText = item.title;
-            result.append(li)
+            ul.append(li)
         }
         
         let downloadLink = document.createElement("a");
@@ -34,9 +39,10 @@ async function getData() {
         downloadLink.href = URL.createObjectURL(blob);
         
         result.append(downloadLink);
+
     } else {
-        let result = document.createElement("p");
-        result.innerText = `Search "${searchText}" failed with status ${response.status}: ${response.statusText}`;
+        
+        result.innerText = `Search "${searchText}" failed with status ${response.status}`;
     }
 
     document.body.append(result);
