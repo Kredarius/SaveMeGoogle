@@ -4,6 +4,9 @@ body {
     padding: 0px;
     font-family: 'Times New Roman', Times, serif;
 }
+ul {
+    text-align: left;
+}
 
 header {
     background-color: lightgray;

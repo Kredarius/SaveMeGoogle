@@ -40,7 +40,6 @@ async function getData() {
         result.append(makeJSONDownload(json.items));
 
     } else {
-
         result.innerText = `Search "${searchText}" failed with status ${response.status}`;
     }
 
