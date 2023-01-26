@@ -28,7 +28,7 @@ async function getData() {
         result.append(ul);
         for (item of json.items) {
             let li = document.createElement("li");
-            li.innerText = item.title;
+            li.innerText = item.title + " ";
 
             let link = document.createElement("a");
             link.innerHTML = "Link";
@@ -54,4 +54,6 @@ function makeJSONDownload(data) {
     downloadLink.innerText = "Download as JSON";
     downloadLink.download = "search-results.json";
     downloadLink.href = URL.createObjectURL(blob);
+
+    return downloadLink;
 }
