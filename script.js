@@ -1,7 +1,5 @@
 btn.addEventListener("click", getData);
 
-let result;
-
 async function getData() {
     const KEY = "AIzaSyDyl1MZJ_Pgw3KYNeoHipZK1rFa8wZP_Wg";
     const CX = "715a88c4d97dc4f10";
@@ -12,14 +10,13 @@ async function getData() {
     url.searchParams.set('key', KEY);
     url.searchParams.set('cx', CX);
 
-    document.body.style.backgroundColor = "gray";
-
+    loadingIndicatorStart();
+    
     const response = await fetch(url, {
         method: "GET",
     });
 
-    result = document.createElement("div");
-    result.className = "result";
+    result = makeResultDiv();
 
     if (+response.status === 200) {   
         const json = await response.json();
@@ -40,20 +37,40 @@ async function getData() {
         result.append(makeJSONDownload(json.items));
 
     } else {
-        result.innerText = `Search "${searchText}" failed with status ${response.status}`;
+        result.append(makeFailureMessage(searchText, response.status))
     }
 
     document.body.append(result);
-    document.body.style.backgroundColor = "";
+    loadingIndicatorEnd();
     }
-
+function 
 function makeJSONDownload(data) {
-    let downloadLink = document.createElement("a");
+    let downloadLinkAnchor = document.createElement("a");
     let blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
 
-    downloadLink.innerText = "Download as JSON";
-    downloadLink.download = "search-results.json";
-    downloadLink.href = URL.createObjectURL(blob);
+    downloadLinkAnchor.innerText = "Download as JSON";
+    downloadLinkAnchor.download = "search-results.json";
+    downloadLinkAnchor.href = URL.createObjectURL(blob);
 
     return downloadLink;
+}
+
+function makeResultDiv() {
+    let resultDiv = document.createElement("div");
+    resultDiv.className = "result";
+    return resultDiv;
+}
+
+function makeFailureMessage(searchText, status) {
+    let paragraph = document.createElement("p");
+    paragraph.innerText = `Search "${searchText}" failed with status ${status}`;
+    return paragraph;
+}
+
+function loadingIndicatorStart() {
+    document.body.style.backgroundColor = "gray";
+}
+
+function loadingIndicatorEnd() {
+    document.body.style.backgroundColor = "";
 }
