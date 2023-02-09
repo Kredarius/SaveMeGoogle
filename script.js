@@ -39,17 +39,17 @@ async function getResponse(search) {
     search.response = response;
 }
 
-async function makeResult(response) {
+async function makeResult(search) {
     let resultDiv = makeResultDiv();
     let resultContent;
     if (result.ok) {
-        let data = await getData();
-        resultContent = makeListWithDownload(data);
+        search.data = await getData(search.response);
+        resultContent = makeListWithDownload(search.data);
     } else {
-        resultContent = makeFailureMessage(response.status);
+        resultContent = makeFailureMessage(search.response.status);
     }
     resultDiv.append(resultContent);
-    return resultDiv;
+    search.resultElement = resultDiv;
 }
 
 async function getData(response) {
