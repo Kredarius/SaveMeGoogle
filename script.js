@@ -20,7 +20,7 @@ async function run() {
     loadingIndicatorStart();  
     await getResponse(search);
     await makeResult(search);
-    document.append(resultDiv);
+    document.append(search.resultElement);
     
     loadingIndicatorEnd();
 }
