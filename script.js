@@ -1,6 +1,11 @@
-btn.addEventListener("click", getData);
+btn.addEventListener("click", run);
 
-async function getData() {
+async function run() {
+    loadingIndicatorStart();
+    let response = getResponse();
+}
+
+async function getResponse() {
     const KEY = "AIzaSyDyl1MZJ_Pgw3KYNeoHipZK1rFa8wZP_Wg";
     const CX = "715a88c4d97dc4f10";
     const searchText = input.value;
@@ -9,12 +14,16 @@ async function getData() {
     url.searchParams.set('q', searchText);
     url.searchParams.set('key', KEY);
     url.searchParams.set('cx', CX);
-
-    loadingIndicatorStart();
     
     const response = await fetch(url, {
         method: "GET",
     });
+    return response;
+}
+
+async function getData(response) {
+    
+}
 
     result = makeResultDiv();
 
