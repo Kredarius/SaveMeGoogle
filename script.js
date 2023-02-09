@@ -1,32 +1,42 @@
 btn.addEventListener("click", run);
 
-const searchText = input.value;
+class Search {
+    constructor() {
+        this.searchText = input.value;
+        this.API = {
+                'KEY': "AIzaSyDyl1MZJ_Pgw3KYNeoHipZK1rFa8wZP_Wg",
+                'CX': "715a88c4d97dc4f10",
+                'URL': new URL('https://www.googleapis.com/customsearch/v1?'),
+            };
+        this.response = undefined;
+        this.data = '';
+        this.resultElement = undefined;
+    }
+}
 
 async function run() {
+    let search = new Search();
     
-    loadingIndicatorStart();
-    
-    let response = await getResponse;
-    let resultDiv = await makeResult(response);
+    loadingIndicatorStart();  
+    await getResponse(search);
+    await makeResult(search);
     document.append(resultDiv);
     
     loadingIndicatorEnd();
 }
 
-async function getResponse() {
-    const KEY = "AIzaSyDyl1MZJ_Pgw3KYNeoHipZK1rFa8wZP_Wg";
-    const CX = "715a88c4d97dc4f10";
-    let url = new URL('https://www.googleapis.com/customsearch/v1?');
-
-    url.searchParams.set('q', searchText);
-    url.searchParams.set('key', KEY);
-    url.searchParams.set('cx', CX);
+async function getResponse(search) {
+    let url = search.API.URL;
+    
+    url.searchParams.set('q', search.searchText);
+    url.searchParams.set('key', search.API.KEY);
+    url.searchParams.set('cx', search.API.CX);
     
     const response = await fetch(url, {
         method: "GET",
     });
     
-    return response;
+    search.response = response;
 }
 
 async function makeResult(response) {
